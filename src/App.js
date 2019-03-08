@@ -7,6 +7,12 @@ class App extends Component {
     password: "",
   }
 
+  componentDidMount() {
+    const cookie = this.getCookie('token')
+    if(cookie){
+      this.setState({user: cookie})
+    }
+  }
   onChange = (evt) => {
     this.setState({[evt.target.name] : evt.target.value})
   }
