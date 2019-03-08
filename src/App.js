@@ -30,6 +30,20 @@ class App extends Component {
     }
   }
 
+  delete_cookie = (name) => {
+    document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+
+  logout = () => {
+    axios.post('http://127.0.0.1:8000/api/v1/rest-auth/logout/')
+    .then(res => {
+      console.log('yay', res.data)
+      this.delete_cookie('token')
+      this.setState({user: "", name: "", "password": ""})
+    })
+    .catch(err => console.log('oh no', err))
+  }
+
  getCookie = (name) => {
     var cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -65,7 +79,10 @@ class App extends Component {
         }
         {
           this.state.user &&
+          <div>
           <button onClick={this.seeBlogs}>see blogs?</button>
+          <button onClick={this.logout}>log out</button>
+          </div>
         }
       </div>
     );
