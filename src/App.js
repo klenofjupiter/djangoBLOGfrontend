@@ -5,6 +5,9 @@ class App extends Component {
     user: "",
     name: "", 
     password: "",
+    signupName: "",
+    signupPassword: "", 
+    signupEmail: "",
   }
 
   componentDidMount() {
@@ -30,9 +33,22 @@ class App extends Component {
     }
   }
 
+  signup = () => {
+    let name = this.state.signupName
+    let password = this.state.signupPassword
+    let email = this.state.signupEmail
+    if (name && email && password){
+      axios.post('http://127.0.0.1:8000/api/v1/rest-auth/registration/', {username: name, password1: password, password2: password, email: email})
+      .then(response => {
+        console.log('response', response.data)
+      })
+      .catch(err => console.log('registartion error!', err))
+    }
+  }
+
   delete_cookie = (name) => {
     document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-}
+  }
 
   logout = () => {
     axios.post('http://127.0.0.1:8000/api/v1/rest-auth/logout/')
@@ -72,9 +88,19 @@ class App extends Component {
       <div className="App">
         { !this.state.user && 
         <div>
-          <label>name </label><input onChange={this.onChange} name="name"/>
-          <label>password </label><input onChange={this.onChange} name="password" />
-          <button onClick={this.login}> login </button>
+          <form>
+            <legend> login </legend>
+            <label>name </label><input onChange={this.onChange} name="name"/>
+            <label>password </label><input onChange={this.onChange} name="password" />
+            <button type="button" onClick={this.login}> login </button>
+          </form>
+          <form>
+            <legend> sign up </legend>
+            <label>name </label><input onChange={this.onChange} name="signupName"/>
+            <label>password </label><input onChange={this.onChange} name="signupPassword" />
+            <label>email </label><input onChange={this.onChange} name="signupEmail" />
+            <button type="button" onClick={this.signup}> sign up </button>
+          </form>
         </div>
         }
         {
